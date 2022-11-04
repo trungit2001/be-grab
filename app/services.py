@@ -1,7 +1,12 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
+from app.database import Base, engine
 from app.models import User, Post
+
+
+def create_database():
+    return Base.metadata.create_all(bind=engine)
 
 
 def create_user(session: Session, user: User) -> User:

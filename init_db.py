@@ -1,8 +1,5 @@
-from app.database import Base, engine, metadata
-
-
-def create_database():
-    return Base.metadata.create_all(bind=engine)
+from app.database import engine, metadata
+from app.services import create_database
 
 
 def main():
