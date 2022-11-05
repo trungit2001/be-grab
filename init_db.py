@@ -1,5 +1,6 @@
 from app.database import engine, metadata
 from app.services import create_database
+from app.models import User, Post
 
 
 def main():
@@ -18,7 +19,10 @@ def main():
         print("[WARNING] Check the database exists data. You may want to delete? (Y/n):", end=' ')
         choose = input()
         if choose in ["y", "Y"]:
-            metadata.drop_all()
+            metadata.drop_all(tables=[
+                User.__table__,
+                Post.__table__
+            ])
             print("[INFO] Database deleted!")
 
             metadata.create_all()
