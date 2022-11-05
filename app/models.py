@@ -1,5 +1,7 @@
+from typing import List
+
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy import Integer, String, DateTime, Boolean
+from sqlalchemy.types import Integer, String, DateTime, Boolean, ARRAY
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -60,7 +62,9 @@ class Post(Base):
 
     id = Column(Integer, autoincrement="auto", primary_key=True, nullable=False, index=True)
     author_id = Column(Integer, ForeignKey("users.id"), index=True)
-    title = Column(String(4096), nullable=False)
+    title = Column(String(128), nullable=False)
+    desc = Column(String(4096), nullable=False)
+    images = Column(ARRAY(String))
     created_date = Column(DateTime, server_default=func.now())
     last_modified_date = Column(DateTime, onupdate=func.now())
     status = Column(Boolean, default=False)
@@ -71,20 +75,26 @@ class Post(Base):
         self,
         author_id: int,
         title: str,
+        desc: str,
+        images: List[str],
         created_date: DateTime = func.now(),
         last_modified_date: DateTime = func.now(),
         status: bool = False,
     ):
         self.author_id = author_id
         self.title = title
+        self.desc = desc
+        self.images = images
         self.created_date = created_date
         self.last_modified_date = last_modified_date
         self.status = status
 
     def __repr__(self):
-        return "Post<(user_id='%s', title='%s', created_date='%s', last_modified_date='%s', status='%s')>" % (
+        return "Post<(user_id='%s', title='%s', desc='%s', images='%s', created_date='%s', last_modified_date='%s', status='%s')>" % (
             self.user_id,
             self.title,
+            self.desc,
+            self.images,
             self.created_date,
             self.last_modified_date,
             self.status
