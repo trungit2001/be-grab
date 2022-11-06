@@ -4,35 +4,26 @@ from app.models import User, Post
 
 
 def main():
-    stmt = '''
-        SELECT 
-            schemaname as schema_name,
-            relname as table_name, 
-            n_live_tup as record_count 
-        FROM pg_stat_user_tables WHERE n_live_tup > 0;
-    '''
-    conn = engine.connect()
-    result = conn.execute(stmt).fetchall()
-    conn.close()
+    metadata.reflect(bind=engine)
+    tables = metadata.sorted_tables
 
-    if result:
-        print("[WARNING] Check the database exists data. You may want to delete? (Y/n):", end=' ')
+    if tables:
+        print("[WARNING] Check the database exists tables/data. You may want to delete? (Y/n):", end=' ')
         choose = input()
         if choose in ["y", "Y"]:
             metadata.drop_all(tables=[
                 User.__table__,
                 Post.__table__
             ])
-            print("[INFO] Database deleted!")
-
-            metadata.create_all()
+            print("[INFO] Database deleted all tables!")
+            
             create_database()
-            print("[INFO] Database initialized!")
+            print("[INFO] Database initialized all tables!")
         else:
-            print("[INFO] Database exists, cannot be initialized!")
+            print("[INFO] Database exists tables, cannot be initialized!")
     else:
         create_database()
-        print("[INFO] Database initialized!")
+        print("[INFO] Database initialized all tables!")
 
 
 if __name__ == "__main__":
