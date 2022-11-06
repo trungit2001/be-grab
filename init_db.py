@@ -2,6 +2,7 @@ from app.database import engine, metadata
 from app.services import create_database
 from app.models import User, Post
 
+
 def main():
     metadata.reflect(bind=engine)
     tables = metadata.sorted_tables
@@ -15,7 +16,7 @@ def main():
                 Post.__table__
             ])
             print("[INFO] Database deleted all tables!")
-
+            
             create_database()
             print("[INFO] Database initialized all tables!")
         else:

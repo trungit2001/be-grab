@@ -6,6 +6,7 @@ from app.models import User, Post
 
 
 def create_database():
+    Base.metadata.drop_all(engine)
     return Base.metadata.create_all(bind=engine)
 
 
